@@ -1,0 +1,58 @@
+name: 'Glean Agent Sync'
+description: 'Glean Agent Sync is responsible for syncing your git-managed Glean agents into your Glean environment. This action does the following: 1. Create draft preview links on PRs 2. Sync updated agent definitions into Glean on merge'
+branding:
+  icon: 'git-merge'
+  color: 'blue'
+inputs:
+  instance-url:
+    description: 'Your Glean instance URL (e.g. https://acme.glean.com)'
+    required: true
+  agent-directory:
+    description: 'Path within the repo where agent spec folders live'
+    required: false
+    default: '.glean/agents'
+  api-token:
+    description: 'Glean client API token with AGENTS scope'
+    required: true
+outputs:
+  synced-agents:
+    description: 'JSON array of synced agent summaries [{agentId, mode, status}]'
+    value: ${{ steps.sync.outputs.synced-agents }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Detect changed agent folders
+      id: detect
+      shell: bash
+      env:
+        AGENT_DIR: ${{ inputs.agent-directory }}
+        EVENT_NAME: ${{ github.event_name }}
+        PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        PUSH_BEFORE_SHA: ${{ github.event.before }}
+        PR_TITLE: ${{ github.event.pull_request.title }}
+      run: ${{ github.action_path }}/scripts/detect-changes.sh
+
+    - name: Parse and sync each agent
+      id: sync
+      if: steps.detect.outputs.folders != '[]'
+      shell: bash
+      env:
+        API_TOKEN: ${{ inputs.api-token }}
+        AGENT_DIR: ${{ inputs.agent-directory }}
+        EVENT_NAME: ${{ steps.detect.outputs.event }}
+        COMMIT_SHA: ${{ steps.detect.outputs.commit_sha }}
+        DEFAULT_MESSAGE: ${{ steps.detect.outputs.default_message }}
+        INSTANCE_URL: ${{ inputs.instance-url }}
+        FOLDERS_JSON: ${{ steps.detect.outputs.folders }}
+      run: ${{ github.action_path }}/scripts/sync-agents.sh
+
+    - name: Comment PR with preview links
+      if: always() && github.event_name == 'pull_request' && steps.detect.outputs.folders != '[]'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        INSTANCE_URL: ${{ inputs.instance-url }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        REPO: ${{ github.repository }}
+      run: ${{ github.action_path }}/scripts/comment-pr.sh

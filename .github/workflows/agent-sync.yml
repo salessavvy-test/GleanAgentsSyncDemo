@@ -1,0 +1,24 @@
+name: Glean Agent Sync
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.glean/agents/**'
+  pull_request:
+    paths:
+      - '.glean/agents/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync agents to Glean
+        uses: ./.github/actions/agent-sync-action
+        with:
+          instance-url: ${{ secrets.GLEAN_INSTANCE_URL }}
+          api-token: ${{ secrets.GLEAN_API_TOKEN }}
