@@ -4,9 +4,10 @@ Test repo for the [Glean Agent Sync](https://github.com/glean-io/agent-sync-acti
 
 ## Setup
 
-1. Add repo secrets in **Settings > Secrets and variables > Actions**:
-   - `GLEAN_INSTANCE_URL` — your Glean instance URL (e.g. `https://acme.glean.com`)
-   - `GLEAN_API_TOKEN` — a Glean client API token with `AGENTS` scope
+1. Add repo secret in **Settings > Secrets and variables > Actions**:
+   - `GLEAN_AGENT_SYNC_TOKEN` — a Glean client API token with `AGENTS` scope
+
+   Instance URL is hardcoded to `https://salessavvy-test-be.glean.com`.
 
 2. Update `.glean/agents/my-test-agent/glean-sync.yaml` with a real `agent-id`.
 

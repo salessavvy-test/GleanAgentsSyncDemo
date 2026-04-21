@@ -24,5 +24,5 @@ jobs:
 
       - uses: ./.github/actions/agent-sync-action
         with:
-          instance-url: ${{ secrets.GLEAN_INSTANCE_URL }}
-          api-token: ${{ secrets.GLEAN_API_TOKEN }}
+          instance-url: https://salessavvy-test-be.glean.com
+          api-token: ${{ secrets.GLEAN_AGENT_SYNC_TOKEN }}
