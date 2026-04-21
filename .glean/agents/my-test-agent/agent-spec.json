@@ -2,15 +2,9 @@
   "rootWorkflow": {
     "name": "My Test Agent",
     "description": "A sample agent for testing the Glean Agent Sync GitHub Action",
-    "icon": "ROBOT",
+    "icon": "DEFAULT",
     "schema": {
-      "type": "object",
-      "properties": {
-        "query": {
-          "type": "string",
-          "description": "The user query to process"
-        }
-      }
+      "steps": []
     }
   }
 }

@@ -1,2 +1,2 @@
-agent-id: my-test-agent
-message: "Initial sync of test agent"
+agent-id: "REPLACE_WITH_YOUR_AGENT_ID"
+message: "Synced from GleanAgentsSyncDemo"
