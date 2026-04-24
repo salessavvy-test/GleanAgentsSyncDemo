@@ -24,6 +24,7 @@ build_sync_request() {
       id: $id,
       commitSha: $sha,
       isDraft: $draft,
+      workflowSource: "GIT",
       name: .rootWorkflow.name,
       description: .rootWorkflow.description,
       icon: .rootWorkflow.icon,
