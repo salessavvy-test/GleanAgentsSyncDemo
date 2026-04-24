@@ -42,13 +42,11 @@ This is a demo repository for the [Glean Agent Sync GitHub Action](https://githu
 
 ## Testing & Development
 
-**Dry-run Mode:**
-The sync script is currently in dry-run mode (lines 112-117 in `sync-agents.sh`). The actual API call is commented out and stubbed to return HTTP 200.
-
-To enable live syncing:
-1. Uncomment lines 112-116 in `.github/actions/agent-sync-action/scripts/sync-agents.sh`
-2. Comment out line 117 (`HTTP_CODE=200`)
-3. Ensure `GLEAN_AGENT_SYNC_TOKEN` secret is set with valid credentials
+**Live API Calls:**
+The sync script makes live API calls to the Glean instance. Ensure:
+- `GLEAN_AGENT_SYNC_TOKEN` secret is set with valid credentials
+- The Glean instance URL is correctly configured
+- All agents have valid `agent-id` values in their `glean-sync.yaml`
 
 **Triggering Workflows:**
 - Workflow only triggers on changes to `.glean/agents/**`
