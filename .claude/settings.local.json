@@ -2,9 +2,6 @@
   "permissions": {
     "allow": [
       "Bash(grep *)",
-      "Bash(bash -n /Users/ramjee.ganti/Documents/work/fde/GleanAgentsSyncDemo/.github/actions/agent-sync-action/scripts/sync-agents.sh)",
-      "Bash(shellcheck /Users/ramjee.ganti/Documents/work/fde/GleanAgentsSyncDemo/.github/actions/agent-sync-action/scripts/sync-agents.sh)",
-      "Bash(shellcheck /Users/ramjee.ganti/Documents/work/fde/GleanAgentsSyncDemo/.github/actions/agent-sync-action/tests/test-build-sync-request.sh)"
     ]
   }
 }
