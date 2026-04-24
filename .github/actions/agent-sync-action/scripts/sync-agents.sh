@@ -109,7 +109,7 @@ while IFS= read -r FOLDER; do
   echo "  Request body:"
   echo "$REQUEST_BODY" | jq .
 
-  # Uncommented and updated endpoint for live sync
+  # Endpoint for live sync
   HTTP_CODE=$(curl -s -o "$RUNNER_TEMP/sync-response-${FOLDER}.json" -w '%{http_code}' \
     -X POST "${INSTANCE_URL}/rest/api/v1/agents/${AGENT_ID}/edit" \
     -H "Authorization: Bearer ${API_TOKEN}" \
