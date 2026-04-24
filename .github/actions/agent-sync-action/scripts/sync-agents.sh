@@ -109,16 +109,15 @@ while IFS= read -r FOLDER; do
   echo "  Request body:"
   echo "$REQUEST_BODY" | jq .
 
-  # TODO: re-enable when testing against a real Glean instance
-  # HTTP_CODE=$(curl -s -o "$RUNNER_TEMP/sync-response-${FOLDER}.json" -w '%{http_code}' \
-  #   -X POST "${INSTANCE_URL}/rest/api/v1/agents/sync" \
-  #   -H "Authorization: Bearer ${API_TOKEN}" \
-  #   -H "Content-Type: application/json" \
-  #   -d "$REQUEST_BODY")
-  HTTP_CODE=200
+  # Uncommented and updated endpoint for live sync
+  HTTP_CODE=$(curl -s -o "$RUNNER_TEMP/sync-response-${FOLDER}.json" -w '%{http_code}' \
+    -X POST "${INSTANCE_URL}/rest/api/v1/agents/${AGENT_ID}/edit" \
+    -H "Authorization: Bearer ${API_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d "$REQUEST_BODY")
 
   if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
-    echo "  Synced successfully (HTTP $HTTP_CODE) [dry-run]"
+    echo "  Synced successfully (HTTP $HTTP_CODE)"
     RESULTS=$(echo "$RESULTS" | jq -c \
       --arg aid "$AGENT_ID" \
       --arg mode "$MODE" \
