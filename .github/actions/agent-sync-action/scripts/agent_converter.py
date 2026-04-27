@@ -321,6 +321,10 @@ class JsonToFolderConverter:
         # supporting chat triggers only for now
         spec['trigger'] = {'type': trigger.get('type', 'CHAT_MESSAGE')}
 
+        icon = request.get('icon')
+        if icon:
+            spec['icon'] = icon
+            
         return spec
 
     # -- Skills --
