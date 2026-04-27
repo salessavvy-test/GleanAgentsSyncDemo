@@ -136,6 +136,7 @@ class FolderToJsonConverter:
             'description': spec.get('description', ''),
             'schema': schema,
             'workflowNamespace': 'AGENT',
+            'icon': spec.get('icon', {'glyph': 'DEFAULT'}),
         }
 
         agent_id = spec.get('id')
