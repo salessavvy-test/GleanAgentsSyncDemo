@@ -136,6 +136,7 @@ class FolderToJsonConverter:
             'description': spec.get('description', ''),
             'schema': schema,
             'workflowNamespace': 'AGENT',
+            'icon': spec.get('icon', {'name': 'GLEAN_APP', 'iconType': 'GLYPH'}),
         }
 
         agent_id = spec.get('id')
@@ -319,6 +320,10 @@ class JsonToFolderConverter:
         trigger = schema.get('trigger', {})
         # supporting chat triggers only for now
         spec['trigger'] = {'type': trigger.get('type', 'CHAT_MESSAGE')}
+
+        icon = request.get('icon')
+        if icon:
+            spec['icon'] = icon
 
         return spec
 

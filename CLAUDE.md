@@ -64,8 +64,12 @@ Each agent folder must declare a `mode` in its `glean-sync.yaml`. The mode is re
 - `GLEAN_AGENT_SYNC_TOKEN` — Glean client API token with `AGENTS` scope
 
 **Instance Configuration:**
-- Glean instance URL is hardcoded in `.github/workflows/agent-sync.yml` to `https://salessavvy-test-be.glean.com`
-- To use a different instance, update the `instance-url` input in the workflow
+- Workflow requires both frontend and backend instance URLs:
+  - `instance-url-fe` — Frontend URL for preview links (e.g., `https://canary.glean.com`)
+  - `instance-url-be` — Backend URL for API calls (e.g., `https://acme-be.glean.com`)
+- Current demo configuration in `.github/workflows/agent-sync.yml`:
+  - FE: `https://canary.glean.com`
+  - BE: `https://salessavvy-test-be.glean.com/qe-glean-exp/112/`
 
 **Agent Setup:**
 - Each agent folder must contain `glean-sync.yaml` with a valid `agent-id` and `mode` field
@@ -124,7 +128,7 @@ The `instructions.md` file contains the main agent instructions, and optional `s
 
 **PR Events:**
 - Syncs agent as draft (`isDraft: true`)
-- Posts comment with preview link: `{instance-url}/agents/{agent-id}?version=draft`
+- Posts comment with preview link: `{instance-url-fe}/agents/{agent-id}?version=draft&beBaseUrl={URL-encoded-instance-url-be}`
 
 **Push to Master:**
 - Syncs agent as published (`isDraft: false`)
@@ -157,6 +161,12 @@ Failures are reported as GitHub Action errors and prevent workflow success.
 - For `automode` agents: multi-file folder (spec.yaml + instructions.md + skills/ + subagents/) is converted to API JSON via `agent_converter.py` (run via `uv`)
 - `setup-uv` step added to composite action for Python/converter support
 - Agent ID in `glean-sync.yaml` must match `id` in `spec.yaml` for auto-mode agents
+
+**FE/BE URL Separation (2026-04-27):**
+- Breaking change: replaced single `instance-url` input with `instance-url-fe` and `instance-url-be`
+- Preview links now include `beBaseUrl` parameter with URL-encoded backend URL
+- Format: `https://<fe>/agents/<id>?version=draft&beBaseUrl=<encoded-be>`
+- Migration: update workflows to provide both `instance-url-fe` and `instance-url-be`
 
 **Before first sync:**
 - Ensure `GLEAN_AGENT_SYNC_TOKEN` secret has valid credentials

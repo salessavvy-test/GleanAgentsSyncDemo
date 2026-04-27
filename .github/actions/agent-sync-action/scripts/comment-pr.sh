@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Required env: GH_TOKEN, INSTANCE_URL, PR_NUMBER, REPO
+# Required env: GH_TOKEN, INSTANCE_URL_FE, INSTANCE_URL_BE, PR_NUMBER, REPO
 
-INSTANCE_URL="${INSTANCE_URL%/}"
+INSTANCE_URL_FE="${INSTANCE_URL_FE%/}"
+INSTANCE_URL_BE="${INSTANCE_URL_BE%/}"
+BE_ENCODED=$(printf %s "$INSTANCE_URL_BE" | jq -sRr @uri)
 MARKER="<!-- glean-agent-sync-action -->"
 RESULTS_FILE="$RUNNER_TEMP/agent-sync-results.json"
 
@@ -19,7 +21,7 @@ while IFS= read -r ROW; do
 
   if [ "$STATUS" = "success" ]; then
     STATUS_TEXT=":white_check_mark: Draft Preview"
-    LINK="[Preview in Glean](${INSTANCE_URL}/agents/${AID}?version=draft)"
+    LINK="[Preview in Glean](${INSTANCE_URL_FE}/agents/${AID}?version=draft&beBaseUrl=${BE_ENCODED})"
   else
     STATUS_TEXT=":x: Draft Preview"
     LINK=$(echo "$ROW" | jq -r '.error // "Failed"')

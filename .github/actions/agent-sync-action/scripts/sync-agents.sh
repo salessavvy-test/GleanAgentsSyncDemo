@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Required env: API_TOKEN, AGENT_DIR, EVENT_NAME, COMMIT_SHA, INSTANCE_URL, FOLDERS_JSON
+# Required env: API_TOKEN, AGENT_DIR, EVENT_NAME, COMMIT_SHA, INSTANCE_URL_BE, FOLDERS_JSON
 # Optional env: DEFAULT_MESSAGE (from PR title or git commit subject)
 
-INSTANCE_URL="${INSTANCE_URL%/}"
+INSTANCE_URL_BE="${INSTANCE_URL_BE%/}"
 RESULTS="[]"
 HAS_FAILURE=false
 
@@ -195,7 +195,7 @@ while IFS= read -r FOLDER; do
 
   # Endpoint for live sync
   HTTP_CODE=$(curl -s -o "$RUNNER_TEMP/sync-response-${FOLDER}.json" -w '%{http_code}' \
-    -X POST "${INSTANCE_URL}/rest/api/v1/agents/${AGENT_ID}/edit" \
+    -X POST "${INSTANCE_URL_BE}/rest/api/v1/agents/${AGENT_ID}/edit" \
     -H "Authorization: Bearer ${API_TOKEN}" \
     -H "Content-Type: application/json" \
     -d "$REQUEST_BODY")
