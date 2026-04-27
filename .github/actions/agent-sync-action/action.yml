@@ -4,8 +4,11 @@ branding:
   icon: 'git-merge'
   color: 'blue'
 inputs:
-  instance-url:
-    description: 'Your Glean instance URL (e.g. https://acme.glean.com)'
+  instance-url-fe:
+    description: 'Frontend instance URL for preview links (e.g. https://canary.glean.com)'
+    required: true
+  instance-url-be:
+    description: 'Backend instance URL for API calls (e.g. https://acme-be.glean.com)'
     required: true
   agent-directory:
     description: 'Path within the repo where agent spec folders live'
@@ -47,7 +50,7 @@ runs:
         EVENT_NAME: ${{ steps.detect.outputs.event }}
         COMMIT_SHA: ${{ steps.detect.outputs.commit_sha }}
         DEFAULT_MESSAGE: ${{ steps.detect.outputs.default_message }}
-        INSTANCE_URL: ${{ inputs.instance-url }}
+        INSTANCE_URL_BE: ${{ inputs.instance-url-be }}
         FOLDERS_JSON: ${{ steps.detect.outputs.folders }}
       run: ${{ github.action_path }}/scripts/sync-agents.sh
 
@@ -56,7 +59,8 @@ runs:
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
-        INSTANCE_URL: ${{ inputs.instance-url }}
+        INSTANCE_URL_FE: ${{ inputs.instance-url-fe }}
+        INSTANCE_URL_BE: ${{ inputs.instance-url-be }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
         REPO: ${{ github.repository }}
       run: ${{ github.action_path }}/scripts/comment-pr.sh
