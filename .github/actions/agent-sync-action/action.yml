@@ -33,6 +33,10 @@ runs:
         PR_TITLE: ${{ github.event.pull_request.title }}
       run: ${{ github.action_path }}/scripts/detect-changes.sh
 
+    - name: Install uv (for auto-mode agent converter)
+      if: steps.detect.outputs.folders != '[]'
+      uses: astral-sh/setup-uv@v6
+
     - name: Parse and sync each agent
       id: sync
       if: steps.detect.outputs.folders != '[]'

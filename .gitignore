@@ -1,1 +1,4 @@
 .personal
+
+# Local tool settings (machine-specific, never commit)
+settings.local.json
