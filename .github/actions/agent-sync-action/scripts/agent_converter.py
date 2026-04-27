@@ -136,7 +136,7 @@ class FolderToJsonConverter:
             'description': spec.get('description', ''),
             'schema': schema,
             'workflowNamespace': 'AGENT',
-            'icon': spec.get('icon', {'glyph': 'DEFAULT'}),
+            'icon': spec.get('icon', {'name': 'GLEAN_APP', 'iconType': 'GLYPH'}),
         }
 
         agent_id = spec.get('id')
@@ -324,7 +324,7 @@ class JsonToFolderConverter:
         icon = request.get('icon')
         if icon:
             spec['icon'] = icon
-            
+
         return spec
 
     # -- Skills --
