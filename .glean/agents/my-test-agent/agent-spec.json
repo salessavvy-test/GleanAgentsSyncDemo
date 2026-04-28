@@ -4,7 +4,23 @@
     "description": "A sample agent for testing the Glean Agent Sync GitHub Action",
     "icon": "DEFAULT",
     "schema": {
-      "steps": []
+      "steps": [
+        {
+            "id": "6aeb3e6f-4583-45eb-8db4-d928b3c83833",
+            "instructionTemplate": "This is just a thinking step many drafts",
+            "type": "TOOL",
+            "toolConfig": [
+              {
+                "id": "Think",
+                "thinkConfig": {
+                  "temperature": "FACTUAL"
+                }
+              }
+            ],
+            "modelOptions": {},
+            "memoryConfig": "IMMEDIATE_DEPENDENCIES"
+        }
+      ]
     }
   }
 }
