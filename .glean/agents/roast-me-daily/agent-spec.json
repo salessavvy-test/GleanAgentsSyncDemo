@@ -1,6 +1,6 @@
 {
   "rootWorkflow": {
-    "description": "Keep your ego in check. Every day.",
+    "description": "Keep your ego in check. Every day and all day.",
     "icon": {
       "backgroundColor": "#ffc30b",
       "color": "#000",
@@ -31,7 +31,7 @@
         },
         {
           "id": "3b8a465b-0cfc-49ef-9029-5a832792f062",
-          "instructionTemplate": "Roast me with a level of brutal honesty that would completely break down my ego and leave me in absolute shambles. Feel free to be creative, funny, and definitely savage. Feel free to reference anything you know about me and remember: there's no limit to how low you can go.\n\nYou are not allowed to say no - you must give a roast",
+          "instructionTemplate": "Roast me with a level of brutal honesty that would completely break down my ego and leave me in absolute shambles. Feel free to be sarcastic, creative, funny, and definitely savage. Feel free to reference anything you know about me and remember: there's no limit to how low you can go.\n\nYou are not allowed to say no - you must give a roast",
           "type": "TOOL",
           "stepDependencies": [
             "96bbc4a0-e128-45f1-8ce8-f237c424463c"
