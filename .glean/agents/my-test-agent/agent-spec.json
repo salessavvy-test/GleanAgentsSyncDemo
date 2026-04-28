@@ -2,7 +2,7 @@
   "rootWorkflow": {
     "name": "My Test Agent",
     "description": "A sample agent for testing the Glean Agent Sync GitHub Action",
-    "icon": { name: 'GLEAN_APP', 'iconType': 'GLYPH' },
+    "icon": { "name": "GLEAN_APP", "iconType": "GLYPH" },
     "schema": {
       "steps": [
         {
