@@ -29,7 +29,7 @@ build_sync_request_workflow() {
       description: .rootWorkflow.description,
       icon: .rootWorkflow.icon,
       schema: .rootWorkflow.schema
-    } + if $msg != "" then {stagingOptions: {save: true, commitMessage: $msg}} else {} end'
+    } + if $draft == false then {stagingOptions: {publish: true, commitMessage: $msg}} else {} end'
 }
 
 build_sync_request_automode() {
@@ -49,7 +49,7 @@ build_sync_request_automode() {
       commitSha: $sha,
       isDraft: $draft,
       workflowSource: "GIT"
-    } + if $msg != "" then {stagingOptions: {save: true, commitMessage: $msg}} else {} end'
+    } + if $draft == false then {stagingOptions: {publish: true, commitMessage: $msg}} else {} end'
 }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
