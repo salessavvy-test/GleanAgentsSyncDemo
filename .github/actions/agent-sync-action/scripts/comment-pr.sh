@@ -21,7 +21,7 @@ while IFS= read -r ROW; do
 
   if [ "$STATUS" = "success" ]; then
     STATUS_TEXT=":white_check_mark: Draft Preview"
-    LINK="[Preview in Glean](${INSTANCE_URL_FE}/agents/${AID}/edit?qe=${BE_ENCODED})"
+    LINK="[Preview in Glean](${INSTANCE_URL_FE}/chat/agents/${AID}/edit?qe=${BE_ENCODED})"
   else
     STATUS_TEXT=":x: Draft Preview"
     LINK=$(echo "$ROW" | jq -r '.error // "Failed"')
