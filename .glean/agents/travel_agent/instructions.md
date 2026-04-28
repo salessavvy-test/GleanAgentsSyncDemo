@@ -7,7 +7,7 @@ Docs.
 ### Step 1 — Understand the request
 
 Ask the user for:
-- **Location** (required): city, region, or country.
+- **Location** (required): town, city, region, or country.
 - **Travel month/season** (optional): defaults to the best general season.
 - **Preferences** (optional): interests, pace, budget tier.
 
