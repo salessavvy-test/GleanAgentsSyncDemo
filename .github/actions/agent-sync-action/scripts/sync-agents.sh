@@ -4,7 +4,14 @@ set -euo pipefail
 # Required env: API_TOKEN, AGENT_DIR, EVENT_NAME, COMMIT_SHA, INSTANCE_URL_BE, FOLDERS_JSON
 # Optional env: DEFAULT_MESSAGE (from PR title or git commit subject)
 
-INSTANCE_URL_BE="${INSTANCE_URL_BE%/}"
+_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=github_output.sh
+source "${_script_dir}/github_output.sh"
+unset _script_dir
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONVERTER="${SCRIPT_DIR}/agent_converter.py"
+
+INSTANCE_URL="${INSTANCE_URL%/}"
 RESULTS="[]"
 HAS_FAILURE=false
 
@@ -51,9 +58,6 @@ build_sync_request_automode() {
       workflowSource: "GIT"
     } + if $draft == false then {stagingOptions: {publish: true, commitMessage: $msg}} else {} end'
 }
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONVERTER="${SCRIPT_DIR}/agent_converter.py"
 
 while IFS= read -r FOLDER; do
   FOLDER_PATH="${AGENT_DIR}/${FOLDER}"
@@ -193,12 +197,29 @@ while IFS= read -r FOLDER; do
   echo "  Request body:"
   echo "$REQUEST_BODY" | jq .
 
-  # Endpoint for live sync
-  HTTP_CODE=$(curl -s -o "$RUNNER_TEMP/sync-response-${FOLDER}.json" -w '%{http_code}' \
+  # Capture curl failures (DNS, TLS, timeout, connection reset, ...) without
+  # tripping `set -e` so the loop can record a per-agent error and continue.
+  CURL_ERR_FILE="$RUNNER_TEMP/sync-curl-error-${FOLDER}.txt"
+  CURL_EXIT=0
+  HTTP_CODE=$(curl -sS --connect-timeout 10 --max-time 60 \
+    -o "$RUNNER_TEMP/sync-response-${FOLDER}.json" -w '%{http_code}' \
     -X POST "${INSTANCE_URL_BE}/rest/api/v1/agents/${AGENT_ID}/edit" \
     -H "Authorization: Bearer ${API_TOKEN}" \
     -H "Content-Type: application/json" \
-    -d "$REQUEST_BODY")
+    -d "$REQUEST_BODY" 2>"$CURL_ERR_FILE") || CURL_EXIT=$?
+
+  if [ "$CURL_EXIT" -ne 0 ] || ! [[ "$HTTP_CODE" =~ ^[0-9]+$ ]]; then
+    CURL_ERR=$(tr '\n' ' ' < "$CURL_ERR_FILE" 2>/dev/null | sed 's/[[:space:]]*$//')
+    [ -z "$CURL_ERR" ] && CURL_ERR="curl exited $CURL_EXIT"
+    echo "::error::Network error syncing agent $AGENT_ID: $CURL_ERR"
+    RESULTS=$(echo "$RESULTS" | jq -c \
+      --arg aid "$AGENT_ID" \
+      --arg mode "$MODE" \
+      --arg err "network error: $CURL_ERR" \
+      '. + [{"agentId": $aid, "mode": $mode, "status": "error", "error": $err}]')
+    HAS_FAILURE=true
+    continue
+  fi
 
   if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
     echo "  Synced successfully (HTTP $HTTP_CODE)"
@@ -222,7 +243,7 @@ while IFS= read -r FOLDER; do
 done < <(echo "$FOLDERS_JSON" | jq -r '.[]')
 
 echo "$RESULTS" > "$RUNNER_TEMP/agent-sync-results.json"
-echo "synced-agents=$RESULTS" >> "$GITHUB_OUTPUT"
+github_output_heredoc "synced-agents" "$RESULTS"
 
 if [ "$HAS_FAILURE" = "true" ]; then
   echo "::error::One or more agents failed to sync"
