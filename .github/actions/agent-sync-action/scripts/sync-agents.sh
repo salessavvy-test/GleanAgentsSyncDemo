@@ -11,7 +11,7 @@ unset _script_dir
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONVERTER="${SCRIPT_DIR}/agent_converter.py"
 
-INSTANCE_URL="${INSTANCE_URL%/}"
+INSTANCE_URL_BE="${INSTANCE_URL_BE%/}"
 RESULTS="[]"
 HAS_FAILURE=false
 
