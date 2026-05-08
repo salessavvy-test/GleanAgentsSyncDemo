@@ -7,7 +7,7 @@
       "steps": [
         {
             "id": "6aeb3e6f-4583-45eb-8db4-d928b3c83833",
-            "instructionTemplate": "This is just a thinking step many drafts",
+            "instructionTemplate": "This is just a thinking and walking step many drafts",
             "type": "TOOL",
             "toolConfig": [
               {
