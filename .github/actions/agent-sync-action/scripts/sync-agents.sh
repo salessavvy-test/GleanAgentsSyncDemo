@@ -203,7 +203,7 @@ while IFS= read -r FOLDER; do
   CURL_EXIT=0
   HTTP_CODE=$(curl -sS --connect-timeout 10 --max-time 60 \
     -o "$RUNNER_TEMP/sync-response-${FOLDER}.json" -w '%{http_code}' \
-    -X POST "${INSTANCE_URL_BE}/rest/api/v1/agents/${AGENT_ID}/edit" \
+    -X POST "${INSTANCE_URL_BE}/rest/api/v1/agents/${AGENT_ID}" \
     -H "Authorization: Bearer ${API_TOKEN}" \
     -H "Content-Type: application/json" \
     -d "$REQUEST_BODY" 2>"$CURL_ERR_FILE") || CURL_EXIT=$?
