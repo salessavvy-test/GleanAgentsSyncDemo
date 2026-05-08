@@ -3,7 +3,7 @@
     "name": "My Test Agent",
     "description": "A sample agent for testing the Glean Agent Sync GitHub Action",
     "icon": { "name": "GLEAN_APP", "iconType": "GLYPH" },
-    "schema": {
+    "schema": {tjh
       "steps": [
         {
             "id": "6aeb3e6f-4583-45eb-8db4-d928b3c83833",
