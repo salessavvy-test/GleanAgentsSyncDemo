@@ -23,6 +23,10 @@ def sort_array(values: Iterable[Number]) -> List[Number]:
     Note:
         This function does not mutate the input iterable; it always returns
         a new list instance.
-    """
 
+    Performance:
+        Time complexity: O(n log n) where n is the length of the input.
+        Uses Python's built-in Timsort algorithm for efficient sorting.
+    """
+    # Implementation leverages Python's optimized built-in sorted() function
     return sorted(values)
